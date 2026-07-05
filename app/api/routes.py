@@ -5,6 +5,7 @@ from app.core.config import ALLOWED_EXTENSIONS, UPLOAD_DIR
 
 from app.services.document_processor import get_document_type
 from app.services.pdf_parser_service import extract_text_from_pdf
+from app.services.ocr_service import extract_text_from_image
 
 router = APIRouter()
 
@@ -47,6 +48,9 @@ def upload_document(file: UploadFile = File(...)):
     if document_type == "pdf":
         extracted_text = extract_text_from_pdf(file_path)
     
+    if document_type == "image":
+        extracted_text = extract_text_from_image(file_path)
+
     return {
         "filename": file.filename,
         "content_type": file.content_type,
