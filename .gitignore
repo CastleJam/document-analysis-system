@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual Environment
+venv/
+
+# Environment Variables
+.env
+
+# Vector Database
+chroma_db/
+
+# Uploaded Files
+uploads/*
+
+# Logs
+logs/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
