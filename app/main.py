@@ -1,10 +1,12 @@
 from fastapi import FastAPI
 
-app = FastAPI()
+from app.api.routes import router
+from app.core.config import APP_DESCRIPTION, APP_NAME, APP_VERSION
 
+app = FastAPI(
+    title=APP_NAME,
+    description=APP_DESCRIPTION,
+    version=APP_VERSION,
+)
 
-@app.get("/")
-def home():
-    return {
-        "message": "Document Analysis System API is running."
-    }
+app.include_router(router)
