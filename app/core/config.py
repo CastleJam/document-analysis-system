@@ -8,3 +8,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 UPLOAD_DIR = BASE_DIR / "uploads"
 
 ALLOWED_EXTENSIONS = {".pdf", ".jpg", ".jpeg", ".png"}
+
+CHUNK_SIZE = 1000
+CHUNK_OVERLAP = 200
