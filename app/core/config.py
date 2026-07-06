@@ -10,4 +10,8 @@ UPLOAD_DIR = BASE_DIR / "uploads"
 ALLOWED_EXTENSIONS = {".pdf", ".jpg", ".jpeg", ".png"}
 
 CHUNK_SIZE = 1000
-CHUNK_OVERLAP = 200
+CHUNK_OVERLAP = 300
+
+EMBEDDING_MODEL = (
+    "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+)

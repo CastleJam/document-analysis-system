@@ -27,3 +27,18 @@
     - Chunking yontemleri dusunuldu, Character Chunking, Sentence Chunking, Paragraph Chunking, Recursive Chunking, Semantic Chunking.
     - Recursive Chunking sektordeki best practicelerden birisi oldugu ve LangChain tarafinda desteklendigi icin secilmistir. Semantic Chunking guzel sonuc verecektir diye dusundum ama onun icin embedding model gerekecek ve daha fazla islem maliyeti, debugginge sebep olacaktir, ilk MVP icin onu uygun gormedim.
     - İlk MVP için 1000 karakter chunk size ve 200 karakter overlap seçildi. Bu değerler, küçük ve orta boy belgelerde anlam bütünlüğünü korurken retrieval maliyetini düşük tutmak için dengeli bir başlangıç noktası olarak belirlendi. Ileride optimize edilebilir.
+
+- Embedding
+    -For the embedding layer, `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` was selected. Following alternatives were evaluated
+
+    - `all-MiniLM-L6-v2` was considered because it is lightweight, fast, and widely used in semantic search tasks. However, it is mainly optimized for English, while the case study requires both Turkish and English document support.
+
+    - `intfloat/multilingual-e5-small` was considered because it is multilingual and retrieval-oriented. However, it requires a query/passage prefix structure, which would add extra implementation complexity for the MVP.
+
+    - `BAAI/bge-m3` was considered as a strong multilingual retrieval model. However, it is heavier than needed for the MVP and may increase setup and runtime requirements.
+
+    - OpenAI Embeddings were also considered because of their strong embedding quality. However, they introduce API dependency, possible cost, and data privacy concerns since document chunks would be sent to an external service.
+
+    - A standard BERT-based embedding approach was not preferred because BERT is not directly optimized for sentence-level semantic search without additional pooling or fine-tuning.
+
+    - Based on these considerations, `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` was selected. It supports Turkish and English, runs locally, is lightweight enough for CPU-based MVP development, produces 384-dimensional embeddings, and integrates easily with ChromaDB.
