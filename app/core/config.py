@@ -15,3 +15,7 @@ CHUNK_OVERLAP = 300
 EMBEDDING_MODEL = (
     "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 )
+
+VECTOR_DB_PATH = BASE_DIR / "vector_db"
+
+COLLECTION_NAME = "document_chunks"

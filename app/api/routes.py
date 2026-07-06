@@ -9,6 +9,7 @@ from app.services.ocr_service import extract_text_from_image
 from app.services.text_cleaning_service import clean_extracted_text
 from app.services.chunking_service import split_text_into_chunks
 from app.services.embedding_service import generate_embeddings
+from app.services.vector_store_service import store_embeddings
 
 router = APIRouter()
 
@@ -65,6 +66,20 @@ def upload_document(file: UploadFile = File(...)):
     # Generate embeddings for the chunks
     embeddings = generate_embeddings(chunks)
 
+    # Store the embeddings and metadata in the vector database
+    file_size = file_path.stat().st_size
+
+    storage_result = store_embeddings(
+        chunks=chunks,
+        embeddings=embeddings,
+        filename=file.filename,
+        content_type=file.content_type,
+        document_type=document_type,
+        language="unknown",
+        file_size=file_size,
+    )
+
+
     return {
         "filename": file.filename,
         "content_type": file.content_type,
@@ -79,6 +94,8 @@ def upload_document(file: UploadFile = File(...)):
         "embedding_dimension": len(embeddings[0]) if embeddings else 0,
         "first_chunk_preview": chunks[0][:500] if chunks else None,
         "second_chunk_preview": chunks[1][:500] if len(chunks) > 1 else None,
+        "stored_vectors": storage_result["stored_vectors"],
+    "sample_stored_record": storage_result["sample_stored_record"],
         "message": "File uploaded successfully.",
-  
+
     }

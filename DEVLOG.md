@@ -42,3 +42,13 @@
     - A standard BERT-based embedding approach was not preferred because BERT is not directly optimized for sentence-level semantic search without additional pooling or fine-tuning.
 
     - Based on these considerations, `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` was selected. It supports Turkish and English, runs locally, is lightweight enough for CPU-based MVP development, produces 384-dimensional embeddings, and integrates easily with ChromaDB.
+
+-Vector Database Seçimi
+
+    -Vector database tercihi için FAISS, ChromaDB ve Pinecone alternatifleri değerlendirildi. Aşağıdaki  değerlendirmeler ışığında bu MVP için ChromaDB seçildi.
+
+    -FAISS, küçük ve orta ölçekli projelerde yüksek performanslı ve hafif bir seçenek olarak değerlendirildi. Ancak metadata yönetimi ve kalıcı veri saklama tarafında ek geliştirme ihtiyacı doğurabileceği için MVP kapsamında ikinci planda bırakıldı.
+
+    -ChromaDB, Python tabanlı olması, RAG projelerinde yaygın kullanılması, local çalışabilmesi, kolay kurulum sunması ve chunk bazlı metadata tutabilmesi nedeniyle tercih edildi. Bu projede her chunk için dosya adı, sayfa numarası, chunk ID, dosya tipi, dil bilgisi ve yükleme zamanı gibi metadata bilgilerini saklamak istiyoruz. Bu nedenle ChromaDB, yalnızca vektör araması yapmakla kalmayıp belge takibi ve kaynak gösterme açısından da daha uygun bir seçenek olarak değerlendirildi.
+
+    -Pinecone ise ölçeklenebilir ve production-ready bir cloud vector database çözümü olarak değerlendirildi. Ancak ücretli olması, API bağımlılığı getirmesi ve belge verilerinin dış bir servise gönderilmesi nedeniyle MVP kapsamında tercih edilmedi. Proje ileride daha büyük veri hacimlerine veya çok kullanıcılı production ortamına taşınırsa Pinecone gibi managed vector database çözümleri yeniden değerlendirilebilir.
