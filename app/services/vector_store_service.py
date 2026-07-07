@@ -8,7 +8,10 @@ from app.core.config import COLLECTION_NAME, VECTOR_DB_PATH
 client = chromadb.PersistentClient(path=str(VECTOR_DB_PATH))
 
 collection = client.get_or_create_collection(
-    name=COLLECTION_NAME
+    name=COLLECTION_NAME,
+    metadata={
+        "hnsw:space": "cosine"
+    }
 )
 
 

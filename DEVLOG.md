@@ -52,3 +52,14 @@
     -ChromaDB, Python tabanlı olması, RAG projelerinde yaygın kullanılması, local çalışabilmesi, kolay kurulum sunması ve chunk bazlı metadata tutabilmesi nedeniyle tercih edildi. Bu projede her chunk için dosya adı, sayfa numarası, chunk ID, dosya tipi, dil bilgisi ve yükleme zamanı gibi metadata bilgilerini saklamak istiyoruz. Bu nedenle ChromaDB, yalnızca vektör araması yapmakla kalmayıp belge takibi ve kaynak gösterme açısından da daha uygun bir seçenek olarak değerlendirildi.
 
     -Pinecone ise ölçeklenebilir ve production-ready bir cloud vector database çözümü olarak değerlendirildi. Ancak ücretli olması, API bağımlılığı getirmesi ve belge verilerinin dış bir servise gönderilmesi nedeniyle MVP kapsamında tercih edilmedi. Proje ileride daha büyük veri hacimlerine veya çok kullanıcılı production ortamına taşınırsa Pinecone gibi managed vector database çözümleri yeniden değerlendirilebilir.
+
+    -ChromaDB'yi cosine metriği ile yapılandırdım. ChromaDB sorgu sonucunda cosine similarity yerine cosine distance döndürdüğü için, sonuçları 1 - distance formülüyle tekrar cosine similarity değerine çevirdim. Embedding'ler normalize_embeddings=True ile üretildiğinden cosine metriği ile en uyumlu şekilde çalışmaktadır. Pratikte Sentence Transformer modelleri çoğunlukla pozitif benzerlik skorları ürettiği için similarity değerleri genellikle 0 ile 1 arasında gözlemlenmektedir.
+
+- LLM Entegrasyonu
+    Iki farkli yaklasim dusunuldu
+    
+    Yazilan yazinin general bir yazi olup olmadigini rule based ile mi karar vermek yoksa LLM'e reasoning yaptirtip intent'in general mesaj olduguna LLM'in kendisinin mi karar vermesi
+
+    RAG'a gitme senaryolarinda ChromaDB'den donen chunklarin similaritysine bakip, belirlenen bir thresholda gore cevap verip vermeme, veya LLM'in kendisinin reasoning yapip cevap verip vermemesini kendisine birakmak
+
+    Karsilasilan problemlerden birisi LLM'in Turkce soruya Turkce, Ingilizce soruya Ingilizce cevap verirken kafasinin karismasi, oyleki Korece ifadeler sunmus bile olmasi. Ayrica "Nasilsin?" sorusunda general message oldugunu algilamak yerine RAG'a basvurmasi ve cevap olarak "I could not find it in the documents" gibi bir cevap veriyor olmasi iyi sonuclar vermedigini ve adjustments gerekliligini gosterdi. Bu durumda Google Gemma 1B kucuk bir model olarak yetersiz kalmis olabilir diye degerlendirildi. Muadil olarak reasoning yapabilen llama3.1 8B enntegre edildi.

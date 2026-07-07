@@ -19,3 +19,9 @@ EMBEDDING_MODEL = (
 VECTOR_DB_PATH = BASE_DIR / "vector_db"
 
 COLLECTION_NAME = "document_chunks"
+
+OLLAMA_BASE_URL = "http://localhost:11434"
+OLLAMA_MODEL = "llama3.1:latest"
+
+RETRIEVAL_TOP_K = 5
+MIN_SIMILARITY_THRESHOLD = 0.6

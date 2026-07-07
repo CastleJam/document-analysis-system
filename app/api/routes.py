@@ -1,7 +1,9 @@
 from pathlib import Path
 from shutil import copyfileobj
 from fastapi import APIRouter, File, HTTPException, UploadFile
+
 from app.core.config import ALLOWED_EXTENSIONS, UPLOAD_DIR
+from app.core.config import MIN_SIMILARITY_THRESHOLD, RETRIEVAL_TOP_K
 
 from app.services.document_processor import get_document_type
 from app.services.pdf_parser_service import extract_text_from_pdf
@@ -10,6 +12,16 @@ from app.services.text_cleaning_service import clean_extracted_text
 from app.services.chunking_service import split_text_into_chunks
 from app.services.embedding_service import generate_embeddings
 from app.services.vector_store_service import store_embeddings
+from app.services.retrieval_service import search_similar_chunks
+from app.services.prompt_builder_service import build_rag_prompt
+from app.services.llm_service import generate_answer
+from app.services.llm_intent_service import classify_intent
+from app.services.general_prompt_service import build_general_prompt
+
+from app.models.question import QuestionRequest
+
+
+
 
 router = APIRouter()
 
@@ -95,7 +107,65 @@ def upload_document(file: UploadFile = File(...)):
         "first_chunk_preview": chunks[0][:500] if chunks else None,
         "second_chunk_preview": chunks[1][:500] if len(chunks) > 1 else None,
         "stored_vectors": storage_result["stored_vectors"],
-    "sample_stored_record": storage_result["sample_stored_record"],
+        "sample_stored_record": storage_result["sample_stored_record"],
         "message": "File uploaded successfully.",
 
+    }
+
+
+@router.post("/ask")
+def ask_question(request: QuestionRequest):
+    question = request.question.strip()
+
+    if not question:
+        return {
+            "answer": "Please provide a question.",
+            "intent": "empty",
+            "results": [],
+        }
+
+    intent = classify_intent(question)
+
+    if intent == "general_message":
+        prompt = build_general_prompt(question)
+        answer = generate_answer(prompt)
+
+        return {
+            "answer": answer,
+            "intent": intent,
+            "results": [],
+        }
+
+    retrieved_chunks = search_similar_chunks(
+        question=question,
+        top_k=RETRIEVAL_TOP_K,
+    )
+
+    if request.use_similarity_threshold:
+        retrieved_chunks = [
+            item for item in retrieved_chunks
+            if item["similarity"] >= MIN_SIMILARITY_THRESHOLD
+        ]
+
+        if not retrieved_chunks:
+            return {
+                "answer": "I could not find this information in the uploaded documents.",
+                "intent": intent,
+                "results": [],
+                "mode": "threshold_blocked",
+                "threshold": MIN_SIMILARITY_THRESHOLD,
+            }
+
+    prompt = build_rag_prompt(
+        question=question,
+        retrieved_chunks=retrieved_chunks,
+    )
+
+    answer = generate_answer(prompt)
+
+    return {
+        "answer": answer,
+        "intent": intent,
+        "results": retrieved_chunks,
+        "mode": "rag_with_threshold" if request.use_similarity_threshold else "rag_llm_decision",
     }
