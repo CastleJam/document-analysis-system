@@ -25,3 +25,6 @@ OLLAMA_MODEL = "llama3.1:latest"
 
 RETRIEVAL_TOP_K = 5
 MIN_SIMILARITY_THRESHOLD = 0.6
+
+LOG_DIR = BASE_DIR / "logs"
+QUERY_LOG_FILE = LOG_DIR / "query_logs.jsonl"

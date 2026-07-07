@@ -4,6 +4,7 @@ from fastapi import APIRouter, File, HTTPException, UploadFile
 
 from app.core.config import ALLOWED_EXTENSIONS, UPLOAD_DIR
 from app.core.config import MIN_SIMILARITY_THRESHOLD, RETRIEVAL_TOP_K
+from app.core.config import OLLAMA_MODEL
 
 from app.services.document_processor import get_document_type
 from app.services.pdf_parser_service import extract_text_from_pdf
@@ -17,9 +18,9 @@ from app.services.prompt_builder_service import build_rag_prompt
 from app.services.llm_service import generate_answer
 from app.services.llm_intent_service import classify_intent
 from app.services.general_prompt_service import build_general_prompt
+from app.services.logging_service import log_query_interaction
 
 from app.models.question import QuestionRequest
-
 
 
 
@@ -130,6 +131,15 @@ def ask_question(request: QuestionRequest):
         prompt = build_general_prompt(question)
         answer = generate_answer(prompt)
 
+        log_query_interaction(
+            question=question,
+            answer=answer,
+            intent=intent,
+            model=OLLAMA_MODEL,
+            retrieved_chunks=[],
+            use_similarity_threshold=request.use_similarity_threshold,
+            threshold=MIN_SIMILARITY_THRESHOLD,
+        )
         return {
             "answer": answer,
             "intent": intent,
@@ -148,6 +158,16 @@ def ask_question(request: QuestionRequest):
         ]
 
         if not retrieved_chunks:
+
+            log_query_interaction(
+                question=question,
+                answer=answer,
+                intent=intent,
+                model=OLLAMA_MODEL,
+                retrieved_chunks=[],
+                use_similarity_threshold=request.use_similarity_threshold,
+                threshold=MIN_SIMILARITY_THRESHOLD,
+            )   
             return {
                 "answer": "I could not find this information in the uploaded documents.",
                 "intent": intent,
@@ -162,6 +182,17 @@ def ask_question(request: QuestionRequest):
     )
 
     answer = generate_answer(prompt)
+
+    log_query_interaction(
+        question=question,
+        answer=answer,
+        intent=intent,
+        model=OLLAMA_MODEL,
+        retrieved_chunks=retrieved_chunks,
+        use_similarity_threshold=request.use_similarity_threshold,
+        threshold=MIN_SIMILARITY_THRESHOLD,
+    )
+
 
     return {
         "answer": answer,
