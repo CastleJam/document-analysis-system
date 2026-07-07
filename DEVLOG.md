@@ -66,3 +66,11 @@
 
     RAG'a gittigi senaryolarda, retrieve ettigi source'da yazan dil ney ise, soruyu farkli dille sormamiza ragmen kaynak dokumandaki dil ile cevap vermesi karsilasilan problemlerden birisidir.
     
+- Streamlit Setup 
+
+
+
+Notlar:
+Page number 
+Multiple file upload
+Check Context Window
