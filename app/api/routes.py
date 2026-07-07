@@ -14,11 +14,14 @@ from app.services.chunking_service import split_text_into_chunks
 from app.services.embedding_service import generate_embeddings
 from app.services.vector_store_service import store_embeddings
 from app.services.retrieval_service import search_similar_chunks
-from app.services.prompt_builder_service import build_rag_prompt
+
 from app.services.llm_service import generate_answer
 from app.services.llm_intent_service import classify_intent
-from app.services.general_prompt_service import build_general_prompt
-from app.services.fallback_prompt_service import build_no_context_fallback_prompt
+from app.services.llm_prompt_service import (
+    build_general_prompt,
+    build_rag_prompt,
+    build_no_context_fallback_prompt,
+)
 from app.services.logging_service import log_query_interaction
 
 from app.models.question import QuestionRequest

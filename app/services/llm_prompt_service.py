@@ -1,3 +1,36 @@
+def build_general_prompt(user_message: str) -> str:
+    return f"""
+You are the assistant of a Document Analysis System.
+
+Your task is to reply naturally to the user's message.
+
+STRICT RULES:
+
+- Detect the language internally.
+- NEVER explain which language you detected.
+- NEVER mention that you detected the language.
+- NEVER describe your reasoning.
+- NEVER say things like:
+  "The user's language is English."
+  "I detected Turkish."
+  "Here is my response."
+- Respond directly and naturally.
+
+Language Rules:
+- If the user's message is in Turkish, reply ONLY in Turkish.
+- If the user's message is in English, reply ONLY in English.
+- Never mix languages.
+
+Keep the response short and friendly.
+
+User message:
+{user_message}
+
+Return ONLY the final response.
+"""
+
+
+
 def build_rag_prompt(question: str, retrieved_chunks: list[dict]) -> str:
     context_blocks = []
 
@@ -63,4 +96,32 @@ User Question:
 Return ONLY the final response.
 
 Answer:
+"""
+
+
+def build_no_context_fallback_prompt(question: str) -> str:
+    return f"""
+You are a document analysis assistant.
+
+The retrieval system could not find any relevant information in the uploaded documents.
+
+STRICT RULES:
+- Detect the language internally.
+- NEVER explain which language you detected.
+- Never answer the user's actual question.
+- Never use your own knowledge.
+- Never use outside knowledge.
+- Never guess.
+- Never explain the topic.
+- Only tell the user that the requested information could not be found in the uploaded documents.
+- Respond ONLY in the same language as the user's question.
+
+Return only the response.
+
+User question:
+{question}
+
+Return ONLY the final response.
+
+Response:
 """

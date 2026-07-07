@@ -68,9 +68,3 @@
     
 - Streamlit Setup 
 
-
-
-Notlar:
-Page number 
-Multiple file upload
-Check Context Window
