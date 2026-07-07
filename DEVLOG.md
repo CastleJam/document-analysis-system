@@ -62,4 +62,7 @@
 
     RAG'a gitme senaryolarinda ChromaDB'den donen chunklarin similaritysine bakip, belirlenen bir thresholda gore cevap verip vermeme, veya LLM'in kendisinin reasoning yapip cevap verip vermemesini kendisine birakmak
 
-    Karsilasilan problemlerden birisi LLM'in Turkce soruya Turkce, Ingilizce soruya Ingilizce cevap verirken kafasinin karismasi, oyleki Korece ifadeler sunmus bile olmasi. Ayrica "Nasilsin?" sorusunda general message oldugunu algilamak yerine RAG'a basvurmasi ve cevap olarak "I could not find it in the documents" gibi bir cevap veriyor olmasi iyi sonuclar vermedigini ve adjustments gerekliligini gosterdi. Bu durumda Google Gemma 1B kucuk bir model olarak yetersiz kalmis olabilir diye degerlendirildi. Muadil olarak reasoning yapabilen llama3.1 8B enntegre edildi.
+    Karsilasilan problemlerden birisi LLM'in Turkce soruya Turkce, Ingilizce soruya Ingilizce cevap verirken kafasinin karismasi, oyleki Korece ifadeler sunmus bile olmasi. Ayrica "Nasilsin?" sorusunda general message oldugunu algilamak yerine RAG'a basvurmasi ve cevap olarak "I could not find it in the documents" gibi bir cevap veriyor olmasi iyi sonuclar vermedigini ve adjustments gerekliligini gosterdi. Bu durumda Google Gemma 1B kucuk bir model olarak yetersiz kalmis olabilir diye degerlendirildi. Muadil olarak reasoning yapabilen llama3.1 8B enntegre edildi. Sonuc olarak gelistirme saglandi ve llama3.1 8B kullanimina karar verildi.
+
+    RAG'a gittigi senaryolarda, retrieve ettigi source'da yazan dil ney ise, soruyu farkli dille sormamiza ragmen kaynak dokumandaki dil ile cevap vermesi karsilasilan problemlerden birisidir.
+    

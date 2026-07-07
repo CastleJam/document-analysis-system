@@ -18,6 +18,7 @@ from app.services.prompt_builder_service import build_rag_prompt
 from app.services.llm_service import generate_answer
 from app.services.llm_intent_service import classify_intent
 from app.services.general_prompt_service import build_general_prompt
+from app.services.fallback_prompt_service import build_no_context_fallback_prompt
 from app.services.logging_service import log_query_interaction
 
 from app.models.question import QuestionRequest
@@ -159,6 +160,9 @@ def ask_question(request: QuestionRequest):
 
         if not retrieved_chunks:
 
+            fallback_prompt = build_no_context_fallback_prompt(question)
+            answer = generate_answer(fallback_prompt)
+
             log_query_interaction(
                 question=question,
                 answer=answer,
@@ -169,7 +173,7 @@ def ask_question(request: QuestionRequest):
                 threshold=MIN_SIMILARITY_THRESHOLD,
             )   
             return {
-                "answer": "I could not find this information in the uploaded documents.",
+                "answer": answer,
                 "intent": intent,
                 "results": [],
                 "mode": "threshold_blocked",

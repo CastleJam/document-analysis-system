@@ -24,7 +24,8 @@ You are a strict document question-answering assistant.
 IMPORTANT LANGUAGE RULE
 ========================
 
-Detect the language of the user's question.
+Detect the language of the user's question internally.
+Never explain the detected language.
 
 If the question is written in Turkish:
 - Answer ONLY in Turkish.
@@ -58,6 +59,8 @@ Document Context:
 User Question:
 
 {question}
+
+Return ONLY the final response.
 
 Answer:
 """
