@@ -6,10 +6,18 @@ The system allows users to upload PDF or image documents, indexes them using Ret
 
 ---
 
+# Demo Video
+
+You may find the demo video here: https://www.loom.com/share/0123c912bea740849cf5754992771844
+
+---
+
 
 # System Architecture and Flow Chart
 
 You may find the related documents under the docs folder.
+
+
 
 # Technologies
 
@@ -25,7 +33,6 @@ You may find the related documents under the docs folder.
 | Chunking | LangChain RecursiveCharacterTextSplitter |
 
 
----
 
 # Installation
 
