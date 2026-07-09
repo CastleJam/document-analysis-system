@@ -10,7 +10,7 @@ venv/
 .env
 
 # Vector Database
-chroma_db/
+vector_db/
 
 # Uploaded Files
 uploads/*
