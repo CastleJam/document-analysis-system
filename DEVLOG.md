@@ -127,3 +127,18 @@ Yaklaşık zaman dağılımım şu şekilde oldu.
 | Prompt Engineering ve Hallucination kontrolü                       |  %10 |
 | UI, Logging ve son düzenlemeler                                    |   %5 |
 | Testing (Smoke, Integration, Manuel, End-to-End senaryo testleri) |  %10 |
+
+
+---
+
+# Şu an bildiğinizle baştan başlasanız neyi farklı yapardınız?
+
+• Intention'a karar veren LLM'i daha cok Orchestrator haline getirmek . Bu hem gelen mesaji uygun sekilde dagitacak, ayni suanda yaptigimiz gibi dokuman ile alakali ise RAG’a yonlendirecek, genel mesaj ise genel prompt’a yonlendirecek, ama ayni zamanda uretilen mesajlar final response olarak verilmeden once kontrol edecek. Projenin olceklenmesi durumunda bu orchestrator LLM, gerekirse toollar cagirabilecek.
+
+• Proje kucuk oldugu icin daha hizli calismasi adına extracted textler direkt olarak Llama 3.1 8B’ye prompt olarak verilebilirdi, cunku kullandigimiz bu LLM’in Context Window’u 128K, bu MVP icin yeteri kadar buyuk. Ama bu yaklasimi tercih etseydim, olceklenebilir olmazdi, sadece bu proje bazinda daha hizli islem yapilabilmesi icin deneyebilirdim. 
+
+• Bir öncekine muadil bir başka yaklaşım olarak, best practice icin her zaman Context Window check etmeyi tercih ederdim, ve yuklenilen dokumanlarin buyukluklerini de hesaba katabilirdim. Cunku şöyle bir durum olabilir, salt bir yaklasim olarak eger elimdeki dokumanlarin buyuklugu Context Windowdan kucuk ise, direkt LLM’e hepsini vermek, buyuk ise RAG’a yonlendirmek aslinda net bir cozum yine de olmuyor. Dokumanlarin sayfa sayisi arttikca, LLMin, bunlarin hepsinin icinden gerekli yeri bulmasi yerine, RAG ile vector search yaparak top-k chunk bulmak daha hizli olabilir.
+
+• Ocr yerine image-to-text uzerine egitilmis bir VLM kullanirdim. Daha iyi sonuc verme durumu olabilir diye düşünüyorum. Extracted Text’leri iki sekilde degerlendirmeyi dusunurdum. Bu konu altındakı ikinci ve üçüncü maddelerdeki durumları göz önünde bulundurarak ya DB’ye kaydederdim ya da RAG’a gitmeden JSON olarak tutup response uretecek LLM’e her zaman verirdim. Cunku image’lerdeki textlerin cok yer kaplamasini ilk bakista beklemezdim. Ama olceklenebilirlik icin üçüncü maddedeki gibi her zaman LLM’e direkt vermek yerine Vector DB’ye kaydetme yolunu tercih ederdim.
+
+• PDF icerisinde fotograf olan senaryolari duzeltmek icin bir yontem arastirirdim.
